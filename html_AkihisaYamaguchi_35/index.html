@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div id="app" class="container">
+    <nav class="flex items-center justify-between flex-wrap bg-teal-500 p-6">
+      <div class="flex items-center flex-shrink-0 text-white mr-6">
+        <svg class="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z"/></svg>
+        <span class="font-semibold text-xl tracking-tight">english words</span>
+      </div>
+      <div class="block lg:hidden">
+        <button class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
+          <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+        </button>
+      </div>
+      <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+        <div class="text-sm lg:flex-grow">
+        </div>
+        <div>
+          <a href="#" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">contact</a>
+        </div>
+      </div>
+    </nav>
+    <header div="header"></header>
+    <div class="title">
+      <!-- <h1 class="mt-20 mb-20">english words</h1> -->
+      <div class="mt-20 marker bg-teal-500"></div>
+    </div>
+
+    <button v-if="startFlg!=true" class="startButton m-10 bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded" @click="gameBegin">START </button>
+
+    <div v-if="startFlg">
+      <div class="question mt-20 mb-20">{{ current_question }}</div>
+      <div v-if="current_question_counts == question_counts" class="clear">Clear!</div>
+      <div class="typeFormWrapper mb-20">
+        <input id="typeForm" v-model="typeBox" type="text" class="typeForm">
+      </div>
+
+      <div class="round">
+        <div class="gaugeWrapper mb-20">
+          <div v-bind:style="styleObject" class="gauge"></div>
+        </div>
+      </div>
+
+      <div class="mb-20">{{current_question_counts}}/{{question_counts}}</div>
+
+    </div>
+
+    <div>
+      <button class="backButton mb-20 bg-teal-500 hover:bg-teal-700" @click="gameBack" v-if="current_question_counts == question_counts">BACK</button>
+    </div>
+
+  </div>
+
+
+  <script>
+    new Vue ({
+      el: "#app",
+      data:{
+        startFlg: "",
+        backFlg: "",
+        current_question: "",
+        array: [
+          'flower',
+          'donuts',
+          'pancake',
+          'refugee',
+          'speaker',
+          'hexagon',
+          'world',
+          'champion',
+          'words',
+          'hell',
+        ],
+        newArray:[],
+        typeBox: "",
+        current_question_counts:0,
+        question_counts:0
+      },
+
+      computed:{
+        styleObject:function() {
+          width = 10 * this.current_question_counts + "%"
+            if(this.current_question_counts == 10){
+              color =  "#03a9f4"
+            } else {
+                color = "orange"
+            }
+            return {
+              'width': width,
+              'background-color':color
+            }
+        }
+      },
+      methods:{
+        gameBegin:function() {
+            this.startFlg = true;
+            this.$nextTick(function() {
+              document.getElementById('typeForm').focus()
+            })
+        },
+
+        gameBack:function() {
+          this.startFlg!=true;
+        },
+      },
+      mounted:function() {
+        this.current_question = this.array[0]
+        this.question_counts = this.array.length
+      },
+
+      watch:{
+        typeBox:function(e) {
+          if(e == this.current_question) {
+            this.array.splice(0,1)
+            this.current_question = this.array[0]
+            this.typeBox = ""
+            this.current_question_counts = this.current_question_counts + 1
+          }
+        }
+      },
+    })
+  </script>
+  <script src="./js/main.js"></script>
+</body>
+</html>
